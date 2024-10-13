@@ -8,4 +8,7 @@ timeout: '1600s'
 # Deploy to Cloud Run
 deploy:
   service: etl-scraper-flaresolverr
-  ingress: all # Set ingress to "all"
+  ingress: all
+  resources:
+    limits:
+      memory: 1024Mi
