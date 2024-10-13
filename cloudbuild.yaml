@@ -1,0 +1,11 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/$PROJECT_ID/etl-scraper-flaresolverr', '.']
+images:
+- 'gcr.io/$PROJECT_ID/etl-scraper-flaresolverr'
+timeout: '1600s'
+
+# Deploy to Cloud Run
+deploy:
+  service: etl-scraper-flaresolverr
+  ingress: all # Set ingress to "all"
