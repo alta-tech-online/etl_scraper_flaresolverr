@@ -12,6 +12,7 @@ from bottle_plugins import prometheus_plugin
 from dtos import V1RequestBase
 import flaresolverr_service
 import utils
+from auth import authorized
 
 
 class JSONErrorBottle(Bottle):
@@ -31,6 +32,10 @@ def index():
     """
     Show welcome message
     """
+    if not authorized(request.json):
+        response.status = 401
+        return {"error": "Unauthorized"}
+    
     res = flaresolverr_service.index_endpoint()
     return utils.object_to_dict(res)
 
@@ -41,6 +46,11 @@ def health():
     Healthcheck endpoint.
     This endpoint is special because it doesn't print traces
     """
+
+    if not authorized(request.json):
+        response.status = 401
+        return {"error": "Unauthorized"}
+
     res = flaresolverr_service.health_endpoint()
     return utils.object_to_dict(res)
 
@@ -50,6 +60,11 @@ def controller_v1():
     """
     Controller v1
     """
+
+    if not authorized(request.json):
+        response.status = 401
+        return {"error": "Unauthorized"}
+
     req = V1RequestBase(request.json)
     res = flaresolverr_service.controller_v1_endpoint(req)
     if res.__error_500__:
